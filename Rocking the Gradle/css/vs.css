@@ -1,0 +1,93 @@
+/*
+
+Visual Studio-like style based on original C# coloring by Jason Diamond <jason@diamond.name>
+
+*/
+
+.reveal code {
+  font-family: 'Droid Sans Mono', monospace;
+}
+
+.reveal pre code {
+  display: block; padding: 0.75em 0.5em;
+  background-color: white;
+  color: black;
+}
+
+.reveal pre .comment,
+.reveal pre .annotation,
+.reveal pre .template_comment,
+.reveal pre .diff .header,
+.reveal pre .chunk,
+.reveal pre .apache .cbracket {
+  color: rgb(0, 128, 0);
+}
+
+.reveal pre .keyword,
+.reveal pre .id,
+.reveal pre .built_in,
+.reveal pre .smalltalk .class,
+.reveal pre .winutils,
+.reveal pre .bash .variable,
+.reveal pre .tex .command,
+.reveal pre .request,
+.reveal pre .status,
+.reveal pre .nginx .title,
+.reveal pre .xml .tag,
+.reveal pre .xml .tag .value {
+  color: rgb(0, 0, 255);
+}
+
+.reveal pre .string,
+.reveal pre .title,
+.reveal pre .parent,
+.reveal pre .tag .value,
+.reveal pre .rules .value,
+.reveal pre .rules .value .number,
+.reveal pre .ruby .symbol,
+.reveal pre .ruby .symbol .string,
+.reveal pre .aggregate,
+.reveal pre .template_tag,
+.reveal pre .django .variable,
+.reveal pre .addition,
+.reveal pre .flow,
+.reveal pre .stream,
+.reveal pre .apache .tag,
+.reveal pre .date,
+.reveal pre .tex .formula {
+  color: rgb(163, 21, 21);
+}
+
+.reveal pre .ruby .string,
+.reveal pre .decorator,
+.reveal pre .filter .argument,
+.reveal pre .localvars,
+.reveal pre .array,
+.reveal pre .attr_selector,
+.reveal pre .pseudo,
+.reveal pre .pi,
+.reveal pre .doctype,
+.reveal pre .deletion,
+.reveal pre .envvar,
+.reveal pre .shebang,
+.reveal pre .preprocessor,
+.reveal pre .userType,
+.reveal pre .apache .sqbracket,
+.reveal pre .nginx .built_in,
+.reveal pre .tex .special,
+.reveal pre .prompt {
+  color: rgb(43, 145, 175);
+}
+
+.reveal pre .phpdoc,
+.reveal pre .javadoc,
+.reveal pre .xmlDocTag {
+  color: rgb(128, 128, 128);
+}
+
+.reveal pre .vhdl .typename { font-weight: bold; }
+.reveal pre .vhdl .string { color: #666666; }
+.reveal pre .vhdl .literal { color: rgb(163, 21, 21); }
+.reveal pre .vhdl .attribute { color: #00B0E8; }
+
+.reveal pre .xml .attribute { color: rgb(255, 0, 0); }

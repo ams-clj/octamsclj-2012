@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+
+    <title>Rocking the Gradle – with Clojure</title>
+
+    <meta name="description" content="A build system designed for heavy duty">
+    <meta name="author" content="Meikel Brandmeyer">
+
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+    <link rel="stylesheet" href="css/reveal.css">
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Serif:700' rel='stylesheet' type='text/css'>
+
+
+    <link rel="stylesheet" href="css/theme/kotka.css" id="theme">
+    <!-- XXX: Change here for light theme used during the presentation.
+    <link rel="stylesheet" href="css/theme/kotka_light.css" id="theme">
+    -->
+
+    <!-- For syntax highlighting -->
+    <link rel="stylesheet" href="css/vs.css">
+
+    <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+    <script>
+      document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+    </script>
+
+    <!--[if lt IE 9]>
+    <script src="js/html5shiv.js"></script>
+    <![endif]-->
+
+    <script src="js/ligature.js"></script>
+  </head>
+
+  <body onload="ligature();">
+    <div class="reveal">
+      <div class="slides">
+        <section>
+          <section data-markdown>
+            # Rocking the Gradle
+            ### With Clojure
+
+            Meikel Brandmeyer, @kotarak<br>
+            Amsterdam, October 27th, 2012
+          </section>
+
+          <section data-markdown>
+            ## About me
+
+            * Toolsmith by passion
+            * Early Clojure adopter (February 2008)
+            * Project lead: [VimClojure](http://bitbucket.org/kotarak/vimclojure)
+            * Project lead: [Clojuresque](http://bitbucket.org/kotarak/clojuresque)
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown>
+            ## Quiz
+          </section>
+
+          <section data-markdown>
+            ### What is this?
+
+            ![Ant build horror](images/ant_build_1.png)
+          </section>
+
+          <section>
+            <h3>Example: Ant</h3>
+            <pre><code class="xml">
+  &lt;target name="compile"&gt;
+    &lt;mkdir dir="build/classes"/&gt;
+    &lt;javac srcdir="src" destdir="build/classes"/&gt;
+  &lt;/target&gt;
+
+  &lt;target name="jar" dependsOn="compile"&gt;
+    &lt;mkdir dir="build/jar"/&gt;
+    &lt;jar destfile="build/jar/app.jar" basedir="build/classes"/&gt;
+  &lt;/target&gt;
+            </code></pre>
+          </section>
+
+          <section data-markdown>
+            ### Spot the problem…
+
+            * imperative
+            * low-level
+            * hard-wired parameters
+            * tasks depend on tasks
+            * app dev is build master?
+
+            <p class="fragment">
+              ⇒ Close to no abstraction!
+            </p>
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown>
+            ## The philosophy
+          </section>
+
+          <section data-markdown>
+            ### Fact
+
+            The real world has real requirements!
+          </section>
+
+          <section data-markdown>
+            ### Conclusion
+
+            The build has to adapt to its environment!
+
+            <p class="fragment"><em>Beware the complexity!</em></p>
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown>
+            ## The toolbox
+          </section>
+
+          <section data-markdown>
+            ### Tasks
+
+            * usual suspects
+            * quick one shot tasks
+            * custom tasks via plugins
+            * has inputs and outputs
+            * embed ant if necessary
+          </section>
+
+          <section data-markdown>
+            ### Source Sets
+
+            * logical group of sources
+            * may consist of many types
+            * acts as funnel
+          </section>
+
+          <section data-markdown>
+            ### Configurations
+
+            * container for artifacts<br>
+              and their dependencies
+            * used to define the classpath
+          </section>
+
+          <section data-markdown>
+            ### Reliability
+
+            * true incremental builds
+            * repeatable builds
+            * profiled builds
+            * robust dependency cache
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown>
+            ## The framework
+          </section>
+
+          <section data-markdown>
+            ### Plugins
+
+            * batteries-included
+            * Java
+            * Groovy
+            * Maven
+            * Eclipse
+            * …
+          </section>
+
+          <section data-markdown>
+            ### Groovy DSL
+
+            * power to the build script
+            * development of custom plugins<br>
+              → hide boilerplate
+            * extension of the DSL itself<br>
+              → custom, tailored build DSL
+          </section>
+
+          <section>
+            <h3>Convention</h3>
+
+            <pre><code class="no-highlight">
+  src/
+    main/
+      java
+      clojure
+      resources
+    test/
+      java
+      clojure
+      resources
+            </code></pre>
+          </section>
+
+          <section data-markdown>
+            ### Convention
+
+            * all plugins agree
+            * no configuration necessary
+            * fast to setup
+          </section>
+        </section>
+
+        <section>
+          <section data-markdown>
+            ### Remember this?
+
+            ![Ant build horror reminder](images/ant_build_1.png)
+          </section>
+
+          <section data-markdown>
+            ### That's the way!
+
+            ![Gradle DSL build](images/gradle_build_1.png)
+          </section>
+        </section>
+
+        <section data-markdown>
+          ## Demo time
+        </section>
+
+        <section>
+          <section data-markdown>
+            ## Instead of…
+
+            ![Fighting the build](images/fight_the_build.png)
+          </section>
+
+          <section data-markdown>
+            ## Relax!
+
+            ![Use tools which don't suck!](images/relax_like_a_boss.png)
+          </section>
+        </section>
+
+        <section data-markdown>
+          ## Questions?
+        </section>
+      </div>
+    </div>
+
+    <script src="js/head.min.js"></script>
+    <script src="js/reveal.min.js"></script>
+
+    <script>
+
+      // Full list of configuration options available here:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        controls:     true,
+        progress:     true,
+        history:      false,
+        mouseWheel:   false,
+        rollingLinks: false,
+
+        //theme:        "default", // available themes are in /css/theme
+        transition:   "default", // default/cube/page/concave/zoom/linear/none
+
+        // Optional libraries used to extend on reveal.js
+        dependencies: [
+        { src:       'js/highlight.js',
+          async:     true,
+          callback:  function() { window.hljs.initHighlightingOnLoad(); }
+        },
+        { src:       'js/classList.js',
+          condition: function() { return !document.body.classList; }
+        },
+        { src:       'js/showdown.js',
+          condition: function() {
+            return !!document.querySelector('[data-markdown]');
+          }
+        },
+        { src:       'js/data-markdown.js',
+          condition: function() {
+            return !!document.querySelector('[data-markdown]');
+          }
+        },
+        { src:       'js/zoom.js',
+          condition: function() { return !!document.body.classList; }
+        },
+        ]
+      });
+    </script>
+  </body>
+</html>
+<!-- vim: set et sts=2 sw=2 : -->
