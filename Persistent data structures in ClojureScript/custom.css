@@ -1,0 +1,16 @@
+body {
+    padding-left: 100px !important;
+    padding-right: 100px !important;
+}
+
+section.slide > h1 {
+    font-size: 72px;
+}
+
+section.slide > div.author {
+    position: absolute;
+    top: 70%;
+    width: 100%;
+    text-align: center;
+    font-size: 36px;
+}

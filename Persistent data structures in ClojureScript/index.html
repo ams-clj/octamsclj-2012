@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <title>Persistent data structures in ClojureScript</title>
+    <link rel="stylesheet" href="deck.js/core/deck.core.css"/>
+    <link rel="stylesheet" href="deck.js/themes/style/swiss.css"/>
+    <!-- <link rel="stylesheet" href="deck.js/themes/transition/horizontal-slide.css"/> -->
+    <link rel="stylesheet" href="deck.js/extensions/hash/deck.hash.css"/>
+    <link rel="stylesheet" href="deck.js/extensions/menu/deck.menu.css"/>
+    <link rel="stylesheet" href="custom.css"/>
+    <script src="deck.js/modernizr.custom.js"></script>
+  </head>
+  <body class="deck-container">
+    <section class="slide">
+      <h1>Persistent data structures in ClojureScript</h1>
+      <div class="author"><p>Michał Marczyk</p></div>
+    </section>
+
+    <section class="slide">
+      <h2>PDSs available</h2>
+      <ul>
+        <li class="slide">In short, equivalent to those in Clojure</li>
+        <li class="slide">
+          Ported from originals developed in Java by Rich Hickey
+        </li>
+        <li class="slide">
+          Ports by Bobby Calderwood (<code>PersistentQueue</code>),
+          László Török (<code>PersistentVector</code>), MM (map types,
+          set types, transient support)
+        </li>
+        <li class="slide">
+          New type minted especially for ClojureScript &mdash; <code>ObjMap</code>
+          <ul>
+            <li class="slide">
+              Optimization for string (and keyword, symbol) lookups
+            </li>
+            <li class="slide">
+              Persistent in the sense <code>PersistentArrayMap</code> is
+            </li>
+            <li class="slide">
+              Use <code>cljs.core/obj-map</code> to force ObjMap creation
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>All the stuff we're used to&hellip;</h2>
+      <ul>
+        <li class="slide">
+          Sane equivalence (<code>=</code>) semantics
+        </li>
+        <li class="slide">
+          Hash function congruent with equivalence
+        </li>
+        <li class="slide">
+          <code>IComparable</code> (thanks to Hubert Iwaniuk),
+          comparators available and used by the <code>-by</code>
+          variants of sorted collections
+        </li>
+        <li class="slide">
+          Transients
+        </li>
+        <li class="slide">
+          <code>IReduce</code> / <code>KVReduce</code> / reducers
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>&hellip;in an efficient package</h2>
+      <ul>
+        <li class="slide">
+          They don't just feel fast, they are fast
+          <ul>
+            <li class="slide">
+              Benchmark suite included with ClojureScript
+            </li>
+            <li class="slide">
+              Brian Taylor's visualization &mdash;
+              <a href="http://www.50ply.com/cljs-bench/">
+                http://www.50ply.com/cljs-bench/
+              </a>
+            </li>
+            <li class="slide">
+              Microbenchmark execution times on modern JS engines
+              often within a small factor of JVM results
+            </li>
+          </ul>
+        </li>
+        <li class="slide">
+          Work to make PDSs fast impacts all of ClojureScript
+        </li>
+        <li class="slide">
+          Lots of great work by David Nolen on this front
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Protocol-backed abstractions</h2>
+      <ul>
+        <li class="slide">
+          ClojureScript proves that protocols work as basic abstraction mechanism
+        </li>
+        <li class="slide">
+          Sequence and collection libraries built on protocols
+        </li>
+        <li class="slide">
+          Transient support, reducers library &mdash; likewise
+          <ul>
+            <li class="slide">
+              Reducers no work at all to port:
+              <ol>
+                <li class="slide">
+                  remove things which make no sense in a
+                  single-threaded environment
+                </li>
+                <li class="slide">
+                  rename some protocols
+                </li>
+              </ol>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Accomplishing high perfomance</h2>
+      <ul>
+        <li class="slide">
+          Protocols vs. &ldquo;interfaces&rdquo;
+        </li>
+        <li class="slide">
+          Type inference
+        </li>
+        <li class="slide">
+          Miscellaneous tricks
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Protocols vs. &ldquo;interfaces&rdquo;</h2>
+      <p class="slide">
+        Arbitrary methods can be defined in <code>deftype</code> under
+        <code>Object</code>
+      </p>
+      <ul>
+        <li class="slide">
+          Ad hoc interface-like polymorphism
+        </li>
+        <li class="slide">
+          Not namespaced
+          <ul>
+            <li class="slide">
+              &hellip;which is fine if you own the types involved and
+              the polymorphic operation is not to be used elsewhere
+            </li>
+            <li class="slide">
+              Not appropriate as open extension mechanism
+            </li>
+          </ul>
+        </li>
+        <li class="slide">
+          Very fast! Key to the performance of
+          <code>PersistentHashMap</code> node operations
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Protocols vs. &ldquo;interfaces&rdquo; cont'd</h2>
+      <p class="slide">
+        Protocols slower than &ldquo;interfaces&rdquo;, but still quite fast!
+      </p>
+      <ul>
+        <li class="slide">
+          Wrapper functions (<code>cljs.core/seq</code> wrapping
+          <code>-seq</code> etc.) special-case important corner cases
+          (<code>nil</code>)
+        </li>
+        <li class="slide">
+          Efficient <code>satisfies?</code> for core protocols
+          implemented inline
+          <ul>
+            <li class="slide">
+              Bit masks used to signal availability of inline implementations
+            </li>
+            <li class="slide">
+              Carefully written to take full advantage of Google
+              Closure optimizations
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Type inference</h2>
+      <ul>
+        <li class="slide">
+          Sane Boolean semantics in JS-land &mdash; <code>cljs.core/truth_</code>
+        </li>
+        <li class="slide">
+          Avoiding the cost, sledgehammer approach &mdash;
+          <code>unchecked-if</code>
+        </li>
+        <li class="slide">
+          The elegant approach &mdash; make use of type information!
+          <ul>
+            <li class="slide">
+              Hints: <code>^boolean</code>, <code>^seq</code>
+            </li>
+            <li class="slide">
+              Simple inference engine
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Miscellaneous tricks</h2>
+      <ul>
+        <li class="slide">
+          Hash caching for strings
+        </li>
+        <li class="slide">
+          Locally imperative code
+          <ul>
+            <li class="slide">
+              OOB communication using mutable boxes (as in Clojure)
+            </li>
+            <li class="slide">
+              Always a viable strategy in performance-sensitive code
+              <ul>
+                <li class="slide">
+                  Premature optimization when starting out
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <section class="slide">
+      <h2>Thank you for your attention!</h2>
+      <p>
+        Michał Marczyk<br/>
+        <a href="mailto:michal.marczyk@gmail.com">
+          michal.marczyk@gmail.com
+        </a>
+        <br/>
+        <a href="https://github.com/michalmarczyk/">
+          github.com/michalmarczyk
+        </a>
+        <br/>
+        mmarczyk on #clojure
+      </p>
+    </section>
+
+    <script src="deck.js/jquery-1.7.2.min.js"></script>
+    <script src="deck.js/core/deck.core.js"></script>
+
+    <script src="deck.js/extensions/hash/deck.hash.js"></script>
+    <script src="deck.js/extensions/menu/deck.menu.js"></script>
+
+    <script>$(function () { $.deck(".slide"); });</script>
+  </body>
+</html>
