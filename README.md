@@ -3,7 +3,7 @@ octamsclj-2012
 
 Slides from the presentations for the 2012, third edition of October Amsterdam Clojure.
 
-This year edition featured:
+This edition featured:
 
 - [Simpler webapps with Clojure](https://github.com/ams-clj/octamsclj-2012/blob/master/GijsStuurman_SimplerWebapps.pdf) - *by [Gijs Stuurman](http://thegeez.net/)*
 - Baby steps with Clojure - *by [Edoardo Causarano](https://twitter.com/curious_corn)*
